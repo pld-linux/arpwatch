@@ -1,5 +1,0 @@
-# Define nice level for arpwatch
-SERVICE_RUN_NICE_LEVEL="+5"
-
-# Name of monitored interfaces
-INTERFACES=
