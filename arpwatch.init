@@ -1,0 +1,96 @@
+#!/bin/sh
+#
+# chkconfig:	345 55 45
+# description:	The arpwatch daemon attempts to keep track of ethernet/ip \
+#		address pairings.
+# processname:	arpwatch
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Initial values
+GLOBAL_OPTIONS=""
+
+# Get service config
+[ -f /etc/sysconfig/arpwatch ] && . /etc/sysconfig/arpwatch
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down "arpwatch"
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+if is_yes "${NO_BOGON}"; then
+	GLOBAL_OPTIONS="-N"
+else
+	if [ -n "${LOCAL_NETWORKS}" ]; then
+		for i in ${LOCAL_NETWORKS}; do
+			GLOBAL_OPTIONS="$GLOBAL_OPTIONS -n $i"
+		done
+	fi
+fi
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/arpwatch ]; then
+		if [ -z "$INTERFACES" ]; then
+			INTERFACES="`/sbin/ip link show \
+			  | egrep '^[^ ].*' |egrep -v "NOARP|LOOPBACK" \
+			  |sed 's/[0-9]*: \([a-zA-Z0-9]*\)[@:].*/\1/'|xargs`"
+		fi
+		[ ! -z "$NETWORKS" ] && NETWORKS="-n $NETWORKS"
+		for IFC in $INTERFACES; do
+			msg_starting "arpwatch ($IFC)"
+			touch /var/lib/arpwatch/$IFC.dat
+			chown 2:2 /var/lib/arpwatch/$IFC.dat
+			OPTIONS="$GLOBAL_OPTIONS"
+			if ! is_yes "${NO_BOGON}"; then
+				eval IF_LOCAL_NETWORKS=\$${IFC}_LOCAL_NETWORKS
+				if [ -n "${IF_LOCAL_NETWORKS}" ]; then
+					for i in ${IF_LOCAL_NETWORKS}; do
+						OPTIONS="$OPTIONS -n $i"
+					done
+				fi
+			fi
+			daemon arpwatch $NETWORKS -i $IFC -f /var/lib/arpwatch/$IFC.dat -u daemon $OPTIONS
+			RETVAL=$?
+			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/arpwatch
+		done
+	else
+		msg_already_running "arpwatch"
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/arpwatch ]; then
+		msg_stopping "arpwatch"
+		killproc arpwatch
+		rm -f /var/lock/subsys/arpwatch >/dev/null 2>&1
+	else
+		msg_not_running "arpwatch"
+	fi	
+	;;
+  status)
+	status arpwatch
+	exit $?
+	;;
+  restart|force-reload)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL
