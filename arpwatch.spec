@@ -50,6 +50,7 @@ Dodatkowo tworzona jest baza par adresów ethernet/ip.
 %patch3 -p0
 
 %build
+cp -f /usr/share/automake/config.sub .
 %configure2_13
 
 %{__make} \
