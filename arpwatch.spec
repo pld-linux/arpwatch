@@ -1,6 +1,3 @@
-#
-# TODO:
-# - add UID entry in init-script - what UID???
 
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
