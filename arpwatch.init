@@ -17,7 +17,7 @@
 
 # Check that networking is up.
 if [ "${NETWORKING}" = "no" ]; then
-	echo "WARNING: Networking is down. Arpwatch service can't be runed."
+	msg_Network_Down "arpwatch"
 	exit 1
 fi
 
@@ -33,19 +33,26 @@ case "$1" in
 			  |sed 's/[0-9]*: \([a-zA-Z0-9]*\)[@:].*/\1/'|xargs`"
 		fi
 		for IFC in $INTERFACES; do
-			show "Starting arpwatch for $IFC"
+			msg_stopping "arpwatch"
 			touch /var/state/arpwatch/$IFC.dat
 			daemon arpwatch -i $IFC -f /var/state/arpwatch/$IFC.dat
+			RETVAL=$?
+			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/arpwatch
 		done
 	else
-		echo "arpwatch already is running"
+		msg_Already_Running "arpwatch"
 	fi
-	touch /var/lock/subsys/arpwatch
 	;;
   stop)
-	show "Stopping arpwatch"
-	killproc arpwatch
 	rm -f /var/lock/subsys/arpwatch
+	if [ -f /var/lock/subsys/arpwatch ]; then
+		msg_stopping "arpwatch"
+		killproc arpwatch
+		rm -f /var/lock/subsys/arpwatch >/dev/null 2>&1
+	else
+		msg_Not_Running "arpwatch"
+		exit 1
+	fi	
 	;;
   status)
 	status arpwatch
@@ -55,8 +62,8 @@ case "$1" in
 	$0 start
 	;;
   *)
-	echo "Usage: $0 {start|stop|status|restart|reload}"
+	msg_Usage "$0 {start|stop|status|restart|reload}"
 	exit 1
 esac
 
-exit 0
+exit $RETVAL
