@@ -11,7 +11,7 @@ Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.Z
 Source1:	%{name}.init
 Patch0:		%{name}-makefile.patch
 Prereq:		chkconfig
-BuildRoot:   	/tmp/%{name}-%{version}-root
+BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
 Arpwatch and arpsnmp are tools that monitors ethernet or fddi activity and
