@@ -70,8 +70,6 @@ install *.{awk,dat} $RPM_BUILD_ROOT/var/lib/arpwatch
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/arpwatch
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/arpwatch
 
-gzip -9nf README CHANGES
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -93,7 +91,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README.gz CHANGES.gz
+%doc README CHANGES
 
 %attr(754,root,root) /etc/rc.d/init.d/arpwatch
 %attr(755,root,root) %{_sbindir}/*
@@ -102,10 +100,10 @@ fi
 
 %{_mandir}/man8/*
 
-%dir    /var/lib/arpwatch
-%config(noreplace) %verify(not size mtime md5) /var/lib/arpwatch/arp.dat
-%config %verify(not size mtime md5) /var/lib/arpwatch/ethercodes.dat
-/var/lib/arpwatch/*.awk
+%attr(750,daemon,root) %dir /var/lib/arpwatch
+%attr(644,daemon,root) %config(noreplace) %verify(not size mtime md5) /var/lib/arpwatch/arp.dat
+%attr(644,daemon,root) %config %verify(not size mtime md5) /var/lib/arpwatch/ethercodes.dat
+%attr(755,daemon,root) /var/lib/arpwatch/*.awk
 
-%attr(755,root,root) /var/lib/arpwatch/arp2ethers
-%attr(755,root,root) /var/lib/arpwatch/massagevendor
+%attr(755,daemon,root) /var/lib/arpwatch/arp2ethers
+%attr(755,daemon,root) /var/lib/arpwatch/massagevendor
