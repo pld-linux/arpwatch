@@ -12,7 +12,7 @@
 . /etc/sysconfig/network
 
 # Initial values
-OPTIONS=""
+GLOBAL_OPTIONS=""
 
 # Get service config
 [ -f /etc/sysconfig/arpwatch ] && . /etc/sysconfig/arpwatch
@@ -27,12 +27,12 @@ else
 	exit 0
 fi
 
-if [ "${NO_BOGON}" = "yes" ]; then
-	OPTIONS="-N"
+if is_yes "${NO_BOGON}"; then
+	GLOBAL_OPTIONS="-N"
 else
 	if [ -n "${LOCAL_NETWORKS}" ]; then
 		for i in ${LOCAL_NETWORKS}; do
-			OPTIONS="$OPTIONS -n $i"
+			GLOBAL_OPTIONS="$GLOBAL_OPTIONS -n $i"
 		done
 	fi
 fi
@@ -53,6 +53,15 @@ case "$1" in
 			msg_starting "arpwatch ($IFC)"
 			touch /var/lib/arpwatch/$IFC.dat
 			chown 2:2 /var/lib/arpwatch/$IFC.dat
+			OPTIONS="$GLOBAL_OPTIONS"
+			if ! is_yes "${NO_BOGON}"; then
+				eval IF_LOCAL_NETWORKS=\$${IFC}_LOCAL_NETWORKS
+				if [ -n "${IF_LOCAL_NETWORKS}" ]; then
+					for i in ${IF_LOCAL_NETWORKS}; do
+						OPTIONS="$OPTIONS -n $i"
+					done
+				fi
+			fi
 			daemon arpwatch $NETWORKS -i $IFC -f /var/lib/arpwatch/$IFC.dat -u daemon $OPTIONS
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/arpwatch
