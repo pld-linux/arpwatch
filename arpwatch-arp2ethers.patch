@@ -1,9 +1,0 @@
-diff -urN arpwatch-2.1a10.org/arp2ethers arpwatch-2.1a10/arp2ethers
---- arpwatch-2.1a10.org/arp2ethers	Sun Jan  7 13:45:01 2001
-+++ arpwatch-2.1a10/arp2ethers	Sun Jan  7 13:45:17 2001
-@@ -1,4 +1,4 @@
--#!/bin/csh -f
-+#!/bin/sh
- # @(#) $Id$ (LBL)
- #
- # Convert arp.dat to ethers format
