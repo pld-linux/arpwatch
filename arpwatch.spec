@@ -2,20 +2,19 @@ Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
 Name:		arpwatch
 Version:	2.1a10
-Release:	1
+Release:	2
+License:	GPL
 Group:		Applications/Networking
 Group(de):	Applikationen/Netzwerkwesen
 Group(pl):	Aplikacje/Sieciowe
-License:	GPL
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-arp2ethers.patch
 Patch2:		%{name}-opt.patch
-Prereq:		/sbin/chkconfig
-Prereq:		rc-scripts >= 0.2.0
 BuildRequires:	libpcap-devel
+Prereq:		rc-scripts >= 0.2.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
