@@ -1,0 +1,9 @@
+diff -Nru arpwatch-2.1a4/arp2ethers arpwatch-2.1a4.new/arp2ethers
+--- arpwatch-2.1a4/arp2ethers	Tue Mar 29 12:44:52 1994
++++ arpwatch-2.1a4.new/arp2ethers	Thu Jul 15 18:53:53 1999
+@@ -1,4 +1,4 @@
+-#!/bin/csh -f
++#!/bin/sh
+ # @(#) $Header$ (LBL)
+ #
+ # Convert arp.dat to ethers format
