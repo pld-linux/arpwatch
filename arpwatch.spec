@@ -2,17 +2,17 @@ Summary:	Arpwatch monitors changes in ethernet/ip address pairings.
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
 Name:		arpwatch
 Version:	2.1a4
-Release:	9
+Release:	10
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
-Copyright:	GPL
+License:	GPL
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.Z
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-makefile.patch
 Patch1:		arpwatch-arp2ethers.patch
 Prereq:		/sbin/chkconfig
-Requires:	rc-scripts
+Requires:	rc-scripts >= 0.2.0
 BuildRequires:	libpcap-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -52,7 +52,7 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 
 %post
 /sbin/chkconfig --add arpwatch
-if test -r /var/lock/subsys/arpwatch; then
+if [ -f /var/lock/subsys/arpwatch ]; then
 	/etc/rc.d/init.d/arpwatch restart 1>&2
 else
 	echo "Run \"/etc/rc.d/init.d/arpwatch start\" to start arpwatch daemon."
@@ -61,8 +61,10 @@ fi
 %preun
 /sbin/chkconfig --del arpwatch
 if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/arpwatch ]; then
+		/etc/rc.d/init.d/arpwatch stop 1>&2
+	fi
 	/sbin/chkconfig --del arpwatch
-	/etc/rc.d/init.d/arpwatch stop 1>&2
 fi
 
 %clean
