@@ -53,10 +53,10 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/arpwatch
 gzip -9nf README CHANGES
 
 %post
-DESC="arpwatch daemon"; %chkconfig_post
+DESC="arpwatch daemon"; %chkconfig_add
 
 %preun
-%chkconfig_preun
+%chkconfig_del
 
 %clean
 rm -rf $RPM_BUILD_ROOT
