@@ -1,8 +1,11 @@
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresСw ethernet/ip
+Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
+Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
 Version:	2.1a11
 Release:	4
+Epoch:		2
 License:	GPL
 Group:		Applications/Networking
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.gz
@@ -23,6 +26,18 @@ and maintain a database of ethernet/ip address pairings.
 %description -l pl
 Arpwatch i arpsnmp to narzЙdzia do monitorowania ethernetu i fddi.
 Dodatkowo tworzona jest baza par adresСw ethernet/ip.
+
+%description -l ru
+Пакет arpwatch содержит утилиты arpwatch и arpsnmp. Они производят
+мониторинг траффика в сетях Ethernet или FDDI и строят базы данных
+адресных пар Ethernet/IP. Изменения в таких парах могут сообщаться при
+помощи e-mail.
+
+%description -l uk
+Пакет arpwatch м╕стить утил╕ти arpwatch та arpsnmp. Вони проводять
+мон╕торинг траф╕ку в Ethernet чи FDDI мережах та будують бази даних
+адресних пар Ethernet/IP. Зм╕ни в таких парах можуть пов╕домлятись за
+допомогою e-mail.
 
 %prep
 %setup  -q
