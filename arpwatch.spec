@@ -2,7 +2,7 @@ Summary:	Arpwatch monitors changes in ethernet/ip address pairings.
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
 Name:		arpwatch
 Version:	2.1a4
-Release:	10
+Release:	11
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
 License:	GPL
@@ -32,17 +32,17 @@ Dodatkowo tworzona jest baza par adresów ethernet/ip.
 %build
 LDFLAGS="-s"; export LDFLAGS
 %configure
-make ARPDIR=/var/state/arpwatch
+make ARPDIR=/var/lib/arpwatch
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{var/state/arpwatch,etc/{rc.d/init.d,sysconfig}} \
+install -d $RPM_BUILD_ROOT/{var/lib/arpwatch,etc/{rc.d/init.d,sysconfig}} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8}
 
 make install install-man DESTDIR=$RPM_BUILD_ROOT
 
-install {arp2ethers,massagevendor} $RPM_BUILD_ROOT/var/state/arpwatch
-install *.{awk,dat} $RPM_BUILD_ROOT/var/state/arpwatch
+install {arp2ethers,massagevendor} $RPM_BUILD_ROOT/var/lib/arpwatch
+install *.{awk,dat} $RPM_BUILD_ROOT/var/lib/arpwatch
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/arpwatch
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/arpwatch
@@ -81,10 +81,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_mandir}/man8/*
 
-%dir    /var/state/arpwatch
-%config(noreplace) %verify(not size mtime md5) /var/state/arpwatch/arp.dat
-%config %verify(not size mtime md5) /var/state/arpwatch/ethercodes.dat
-/var/state/arpwatch/*.awk
+%dir    /var/lib/arpwatch
+%config(noreplace) %verify(not size mtime md5) /var/lib/arpwatch/arp.dat
+%config %verify(not size mtime md5) /var/lib/arpwatch/ethercodes.dat
+/var/lib/arpwatch/*.awk
 
-%attr(755,root,root) /var/state/arpwatch/arp2ethers
-%attr(755,root,root) /var/state/arpwatch/massagevendor
+%attr(755,root,root) /var/lib/arpwatch/arp2ethers
+%attr(755,root,root) /var/lib/arpwatch/massagevendor
