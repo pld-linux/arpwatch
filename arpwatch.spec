@@ -17,8 +17,8 @@ BuildRequires:	libpcap-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Arpwatch and arpsnmp are tools that monitors ethernet or fddi activity and
-maintain a database of ethernet/ip address pairings.
+Arpwatch and arpsnmp are tools that monitors ethernet or fddi activity
+and maintain a database of ethernet/ip address pairings.
 
 %description -l pl
 Arpwatch i arpsnmp to narzêdzia do monitorowania ethernetu i fddi.
