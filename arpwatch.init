@@ -27,15 +27,23 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/arpwatch ]; then
-		show Starting arpwatch
-		daemon arpwatch
+		if [ -z "$INTERFACES" ]; then
+			INTERFACES="`/sbin/ip link show \
+			  | egrep '^[^ ].*' |egrep -v "NOARP|LOOPBACK" \
+			  |sed 's/[0-9]*: \([a-zA-Z0-9]*\)[@:].*/\1/'|xargs`"
+		fi
+		for IFC in $INTERFACES; do
+			show "Starting arpwatch for $IFC"
+			touch /var/state/arpwatch/$IFC.dat
+			daemon arpwatch -i $IFC -f /var/state/arpwatch/$IFC.dat
+		done
 	else
 		echo "arpwatch already is running"
 	fi
 	touch /var/lock/subsys/arpwatch
 	;;
   stop)
-	show Stopping arpwatch
+	show "Stopping arpwatch"
 	killproc arpwatch
 	rm -f /var/lock/subsys/arpwatch
 	;;
