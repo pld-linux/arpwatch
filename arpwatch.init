@@ -16,7 +16,7 @@
 
 # Check that networking is up.
 if [ "${NETWORKING}" = "no" ]; then
-	msg_Network_Down "arpwatch"
+	msg_network_down "arpwatch"
 	exit 1
 fi
 
@@ -39,7 +39,7 @@ case "$1" in
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/arpwatch
 		done
 	else
-		msg_Already_Running "arpwatch"
+		msg_already_running "arpwatch"
 	fi
 	;;
   stop)
@@ -48,7 +48,7 @@ case "$1" in
 		killproc arpwatch
 		rm -f /var/lock/subsys/arpwatch >/dev/null 2>&1
 	else
-		msg_Not_Running "arpwatch"
+		msg_not_running "arpwatch"
 		exit 1
 	fi	
 	;;
@@ -60,7 +60,7 @@ case "$1" in
 	$0 start
 	;;
   *)
-	msg_Usage "$0 {start|stop|status|restart|reload}"
+	msg_usage "$0 {start|stop|status|restart|reload}"
 	exit 1
 esac
 
