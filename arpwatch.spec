@@ -32,14 +32,14 @@ Dodatkowo tworzona jest baza par adresów ethernet/ip.
 %build
 LDFLAGS="-s"; export LDFLAGS
 %configure
-make ARPDIR=/var/lib/arpwatch
+%{__make} ARPDIR=/var/lib/arpwatch
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{var/lib/arpwatch,etc/{rc.d/init.d,sysconfig}} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8}
 
-make install install-man DESTDIR=$RPM_BUILD_ROOT
+%{__make} install install-man DESTDIR=$RPM_BUILD_ROOT
 
 install {arp2ethers,massagevendor} $RPM_BUILD_ROOT/var/lib/arpwatch
 install *.{awk,dat} $RPM_BUILD_ROOT/var/lib/arpwatch
