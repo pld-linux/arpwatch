@@ -32,7 +32,7 @@ case "$1" in
 			  |sed 's/[0-9]*: \([a-zA-Z0-9]*\)[@:].*/\1/'|xargs`"
 		fi
 		for IFC in $INTERFACES; do
-			msg_starting "arpwatch ($INTERFACES)"
+			msg_starting "arpwatch ($IFC)"
 			touch /var/lib/arpwatch/$IFC.dat
 			daemon arpwatch -i $IFC -f /var/lib/arpwatch/$IFC.dat
 			RETVAL=$?
