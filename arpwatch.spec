@@ -4,20 +4,19 @@ Summary(pl):	Arpwatch monitoruje zmiany w parach adresСw ethernet/ip
 Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
-Version:	2.1a11
-Release:	9
+Version:	2.1a13
+Release:	1
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.gz
-# Source0-md5:	9ecd00db892737431b0e524f3e52e19e
+# Source0-md5:	b9ff9739cdd2c0e9807b2d05860e4811
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-makefile.patch
-Patch1:		%{name}-arp2ethers.patch
-Patch2:		%{name}-opt.patch
-Patch3:		%{name}-drop.patch
-Patch4:		%{name}-drop-man.patch
+Patch1:		%{name}-opt.patch
+Patch2:		%{name}-drop.patch
+Patch3:		%{name}-drop-man.patch
 BuildRequires:	libpcap-devel
 PreReq:		rc-scripts >= 0.2.0
 Requires(post,preun):	/sbin/chkconfig
@@ -48,8 +47,7 @@ Dodatkowo tworzona jest baza par adresСw ethernet/ip.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p0
+%patch3 -p0
 
 %build
 %configure2_13
