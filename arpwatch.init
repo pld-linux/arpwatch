@@ -31,10 +31,11 @@ case "$1" in
 			  | egrep '^[^ ].*' |egrep -v "NOARP|LOOPBACK" \
 			  |sed 's/[0-9]*: \([a-zA-Z0-9]*\)[@:].*/\1/'|xargs`"
 		fi
+		[ ! -z "$NETWORKS" ] && NETWORKS="-n $NETWORKS"
 		for IFC in $INTERFACES; do
 			msg_starting "arpwatch ($IFC)"
 			touch /var/lib/arpwatch/$IFC.dat
-			daemon arpwatch -i $IFC -f /var/lib/arpwatch/$IFC.dat -u daemon
+			daemon arpwatch $NETWORKS -i $IFC -f /var/lib/arpwatch/$IFC.dat -u daemon
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/arpwatch
 		done

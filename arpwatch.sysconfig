@@ -3,3 +3,6 @@ SERVICE_RUN_NICE_LEVEL="+5"
 
 # Name of monitored interfaces
 INTERFACES=
+
+# networks to control
+NETWORKS=
