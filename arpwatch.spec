@@ -5,7 +5,7 @@ Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
 Version:	2.1a11
-Release:	5
+Release:	6
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
