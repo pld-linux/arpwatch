@@ -77,12 +77,3 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(755,root,root) /var/db/arpwatch/arp2ethers
 %attr(755,root,root) /var/db/arpwatch/massagevendor
-
-%changelog
-* Mon Jun 07 1999 Jan Rêkorajski <baggins@pld.org.pl>
-  [2.1a4-6]
-- spec cleanup
-
-* Tue Feb 16 1999 Artur Frysiak <wiget@usa.net>
-  [2.1a4-5d]
-- initial release for PLD
