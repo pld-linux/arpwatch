@@ -11,6 +11,7 @@ Source1:	%{name}.init
 Patch0:		%{name}-makefile.patch
 Patch1:		arpwatch-arp2ethers.patch
 Prereq:		/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
