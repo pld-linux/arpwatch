@@ -14,7 +14,7 @@ Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-arp2ethers.patch
 Patch2:		%{name}-opt.patch
 Prereq:		/sbin/chkconfig
-Requires:	rc-scripts >= 0.2.0
+Prereq:		rc-scripts >= 0.2.0
 BuildRequires:	libpcap-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
