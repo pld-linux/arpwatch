@@ -1,6 +1,3 @@
-#
-# TODO:
-# - add UID entry in init-script - what UID???
 
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresСw ethernet/ip
@@ -8,11 +5,12 @@ Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
 Version:	2.1a11
-Release:	5
+Release:	6
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.gz
+# Source0-md5:	9ecd00db892737431b0e524f3e52e19e
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-makefile.patch
@@ -21,8 +19,8 @@ Patch2:		%{name}-opt.patch
 Patch3:		%{name}-drop.patch
 Patch4:		%{name}-drop-man.patch
 BuildRequires:	libpcap-devel
-Prereq:		rc-scripts >= 0.2.0
-Prereq:		/sbin/chkconfig
+PreReq:		rc-scripts >= 0.2.0
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -55,14 +53,17 @@ Dodatkowo tworzona jest baza par adresСw ethernet/ip.
 
 %build
 %configure2_13
-%{__make} ARPDIR=/var/lib/arpwatch
+
+%{__make} \
+	ARPDIR=/var/lib/arpwatch
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{var/lib/arpwatch,etc/{rc.d/init.d,sysconfig}} \
+install -d $RPM_BUILD_ROOT{/var/lib/arpwatch,/etc/{rc.d/init.d,sysconfig}} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8}
 
-%{__make} install install-man DESTDIR=$RPM_BUILD_ROOT
+%{__make} install install-man \
+	DESTDIR=$RPM_BUILD_ROOT
 
 install arp2ethers massagevendor $RPM_BUILD_ROOT/var/lib/arpwatch
 install *.{awk,dat} $RPM_BUILD_ROOT/var/lib/arpwatch
