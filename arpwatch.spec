@@ -68,7 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(755,root,root) /usr/sbin/*
 
-%attr(644,root, man) %{_mandir}/man8/*
+%{_mandir}/man8/*
 
 %attr(750,root,root) /etc/rc.d/init.d/arpwatch
 
