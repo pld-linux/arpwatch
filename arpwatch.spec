@@ -53,21 +53,10 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/arpwatch
 gzip -9nf README CHANGES
 
 %post
-/sbin/chkconfig --add arpwatch
-if [ -f /var/lock/subsys/arpwatch ]; then
-	/etc/rc.d/init.d/arpwatch restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/arpwatch start\" to start arpwatch daemon."
-fi
+DESC="arpwatch daemon"; %chkconfig_post
 
 %preun
-/sbin/chkconfig --del arpwatch
-if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/arpwatch ]; then
-		/etc/rc.d/init.d/arpwatch stop 1>&2
-	fi
-	/sbin/chkconfig --del arpwatch
-fi
+%chkconfig_preun
 
 %clean
 rm -rf $RPM_BUILD_ROOT
