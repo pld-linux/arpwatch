@@ -19,8 +19,8 @@ Patch2:		%{name}-opt.patch
 Patch3:		%{name}-drop.patch
 Patch4:		%{name}-drop-man.patch
 BuildRequires:	libpcap-devel
-Prereq:		rc-scripts >= 0.2.0
-Prereq:		/sbin/chkconfig
+PreReq:		rc-scripts >= 0.2.0
+Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -53,14 +53,17 @@ Dodatkowo tworzona jest baza par adresów ethernet/ip.
 
 %build
 %configure2_13
-%{__make} ARPDIR=/var/lib/arpwatch
+
+%{__make} \
+	ARPDIR=/var/lib/arpwatch
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{var/lib/arpwatch,etc/{rc.d/init.d,sysconfig}} \
+install -d $RPM_BUILD_ROOT{/var/lib/arpwatch,/etc/{rc.d/init.d,sysconfig}} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8}
 
-%{__make} install install-man DESTDIR=$RPM_BUILD_ROOT
+%{__make} install install-man \
+	DESTDIR=$RPM_BUILD_ROOT
 
 install arp2ethers massagevendor $RPM_BUILD_ROOT/var/lib/arpwatch
 install *.{awk,dat} $RPM_BUILD_ROOT/var/lib/arpwatch
