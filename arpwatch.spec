@@ -51,6 +51,9 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/arpwatch
 
 gzip -9nf README CHANGES
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %post
 /sbin/chkconfig --add arpwatch
 if [ -f /var/lock/subsys/arpwatch ]; then
@@ -60,16 +63,12 @@ else
 fi
 
 %preun
-/sbin/chkconfig --del arpwatch
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/arpwatch ]; then
 		/etc/rc.d/init.d/arpwatch stop 1>&2
 	fi
 	/sbin/chkconfig --del arpwatch
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
