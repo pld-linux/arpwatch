@@ -34,7 +34,7 @@ case "$1" in
 		for IFC in $INTERFACES; do
 			msg_starting "arpwatch ($IFC)"
 			touch /var/lib/arpwatch/$IFC.dat
-			daemon arpwatch -i $IFC -f /var/lib/arpwatch/$IFC.dat
+			daemon arpwatch -i $IFC -f /var/lib/arpwatch/$IFC.dat -u daemon
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/arpwatch
 		done
