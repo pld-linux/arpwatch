@@ -5,27 +5,34 @@
 #		address pairings.
 # processname: arpwatch
 
-# Source function library.
+
+# Source function library
 . /etc/rc.d/init.d/functions
 
-# Get config.
+# Get network config
 . /etc/sysconfig/network
 
+# Get service config
+[ -f /etc/sysconfig/arpwatch ] && . /etc/sysconfig/arpwatch
+
 # Check that networking is up.
-if [ "${NETWORKING}" = "no" ]
-then
-	exit 0
-fi
+[ "${NETWORKING}" = "no" ] && echo "Error: Networking is down" && exit 0
+
 
 # See how we were called.
 case "$1" in
   start)
-	show Starting arpwatch:
-	daemon +2 arpwatch
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/arpwatch ]; then
+		show Starting arpwatch
+		daemon arpwatch
+	else
+		echo "arpwatch already is running"
+	fi
 	touch /var/lock/subsys/arpwatch
 	;;
   stop)
-	show Stopping arpwatch: 
+	show Stopping arpwatch
 	killproc arpwatch
 	rm -f /var/lock/subsys/arpwatch
 	;;
