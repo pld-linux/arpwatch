@@ -14,7 +14,7 @@ Patch1:		arpwatch-arp2ethers.patch
 Prereq:		/sbin/chkconfig
 Requires:	rc-scripts
 BuildRequires:	libpcap-devel
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 Arpwatch and arpsnmp are tools that monitors ethernet or fddi activity and
