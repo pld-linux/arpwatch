@@ -2,7 +2,7 @@ Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
 Name:		arpwatch
 Version:	2.1a11
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications/Networking
 Group(de):	Applikationen/Netzwerkwesen
@@ -33,8 +33,7 @@ Dodatkowo tworzona jest baza par adresów ethernet/ip.
 %patch2 -p1
 
 %build
-autoconf
-%configure
+%configure2_13
 %{__make} ARPDIR=/var/lib/arpwatch
 
 %install
