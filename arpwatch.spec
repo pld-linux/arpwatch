@@ -1,10 +1,14 @@
+#
+# TODO:
+# - add UID entry in init-script - what UID???
+
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresСw ethernet/ip
 Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
 Version:	2.1a11
-Release:	4
+Release:	5
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
@@ -14,6 +18,8 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-arp2ethers.patch
 Patch2:		%{name}-opt.patch
+Patch3:		%{name}-drop.patch
+Patch4:		%{name}-drop-man.patch
 BuildRequires:	libpcap-devel
 Prereq:		rc-scripts >= 0.2.0
 Prereq:		/sbin/chkconfig
@@ -44,6 +50,8 @@ Dodatkowo tworzona jest baza par adresСw ethernet/ip.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p0
 
 %build
 %configure2_13
