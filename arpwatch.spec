@@ -8,6 +8,7 @@ Group(pl):	Aplikacje/Sieciowe
 Copyright:	GPL
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.Z
 Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-makefile.patch
 Patch1:		arpwatch-arp2ethers.patch
 Prereq:		/sbin/chkconfig
