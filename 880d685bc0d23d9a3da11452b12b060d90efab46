@@ -1,0 +1,6 @@
+- standarized %post, %preun,
+- simplifications in %install,
+- Prereq: /sbin/chkconfig instead chkconfig,
+- added arpwatch-arp2ethers.patch (arp2ethers can be pure sh script instead
+  csh),
+- fixed passing LDFLAGS.
