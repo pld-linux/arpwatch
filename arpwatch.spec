@@ -2,7 +2,7 @@ Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
 Name:		arpwatch
 Version:	2.1a4
-Release:	12
+Release:	13
 Group:		Applications/Networking
 Group(de):	Applikationen/Netzwerkwesen
 Group(pl):	Aplikacje/Sieciowe
@@ -12,6 +12,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-makefile.patch
 Patch1:		%{name}-arp2ethers.patch
+Patch2:		%{name}-opt.patch
 Prereq:		/sbin/chkconfig
 Requires:	rc-scripts >= 0.2.0
 BuildRequires:	libpcap-devel
@@ -29,8 +30,10 @@ Dodatkowo tworzona jest baza par adresów ethernet/ip.
 %setup  -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
+autoconf
 %configure
 %{__make} ARPDIR=/var/lib/arpwatch
 
