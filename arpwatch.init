@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# chkconfig: - 55 45
+# chkconfig: 345 55 45
 # description:	The arpwatch daemon attempts to keep track of ethernet/ip \
 #		address pairings.
 # processname: arpwatch
