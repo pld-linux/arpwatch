@@ -50,7 +50,7 @@ done
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/arpwatch
 
-gzip -9nf $RPM_BUILD_ROOT/usr/man/man*/*
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/*
 gzip -9nf README CHANGES
 
 %post 
@@ -68,7 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %attr(755,root,root) /usr/sbin/*
 
-%attr(644,root, man) /usr/man/man8/*
+%attr(644,root, man) %{_mandir}/man8/*
 
 %attr(750,root,root) /etc/rc.d/init.d/arpwatch
 
