@@ -6,7 +6,6 @@ Release:	6
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
 Copyright:	GPL
-Vendor:		PLD
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.Z	
 Source1:	%{name}.init
 Patch0:		%{name}-makefile.patch
