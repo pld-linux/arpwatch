@@ -33,7 +33,7 @@ case "$1" in
 			  |sed 's/[0-9]*: \([a-zA-Z0-9]*\)[@:].*/\1/'|xargs`"
 		fi
 		for IFC in $INTERFACES; do
-			msg_stopping "arpwatch"
+			msg_starting "arpwatch"
 			touch /var/lib/arpwatch/$IFC.dat
 			daemon arpwatch -i $IFC -f /var/lib/arpwatch/$IFC.dat
 			RETVAL=$?
@@ -44,7 +44,6 @@ case "$1" in
 	fi
 	;;
   stop)
-	rm -f /var/lock/subsys/arpwatch
 	if [ -f /var/lock/subsys/arpwatch ]; then
 		msg_stopping "arpwatch"
 		killproc arpwatch
