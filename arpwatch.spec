@@ -9,7 +9,7 @@ Copyright:	GPL
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.Z	
 Source1:	%{name}.init
 Patch0:		%{name}-makefile.patch
-BuildPrereq:	libpcap-devel
+#BuildPrereq:	libpcap-devel
 Prereq:		chkconfig
 BuildRoot:	/tmp/%{name}-%{version}-root
 
@@ -68,7 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_mandir}/man8/*
 
-%attr(750,root,root) /etc/rc.d/init.d/arpwatch
+%attr(754,root,root) /etc/rc.d/init.d/arpwatch
 
 %dir    /var/db/arpwatch
 %config(noreplace) %verify(not size mtime md5) /var/db/arpwatch/arp.dat
