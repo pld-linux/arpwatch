@@ -6,11 +6,11 @@ Release:	6
 Group:		Applications/Networking
 Group(pl):	Aplikacje/Sieciowe
 Copyright:	GPL
-Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.Z	
+Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.Z
 Source1:	%{name}.init
 Patch0:		%{name}-makefile.patch
-#BuildPrereq:	libpcap-devel
-Prereq:		chkconfig
+Patch1:		arpwatch-arp2ethers.patch
+Prereq:		/sbin/chkconfig
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
@@ -24,51 +24,53 @@ Dodatkowo tworzona jest baza par adresów ethernet/ip.
 %prep
 %setup  -q
 %patch0 -p1
+%patch1 -p1
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
+LDFLAGS="-s"; export LDFLAGS
 %configure
 make ARPDIR=/var/db/arpwatch
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/{var/db/arpwatch,etc/rc.d/init.d,%{_sbindir},%{_mandir}/man8}
 
-install -d $RPM_BUILD_ROOT/{var/db/arpwatch,etc/rc.d/init.d,usr/{sbin,share/man/man8}}
+make install install-man DESTDIR=$RPM_BUILD_ROOT
 
-make install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	install-man
-
-for n in arp2ethers massagevendor; do
-        install -m755 $n $RPM_BUILD_ROOT/var/db/arpwatch
-done
-for n in *.awk *.dat; do
-        install -m644 $n $RPM_BUILD_ROOT/var/db/arpwatch
-done
+install {arp2ethers,massagevendor} $RPM_BUILD_ROOT/var/db/arpwatch
+install *.{awk,dat} $RPM_BUILD_ROOT/var/db/arpwatch
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/arpwatch
 
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/*
-gzip -9nf README CHANGES
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
+	README CHANGES
 
-%post 
-chkconfig --add arpwatch
+%post
+/sbin/chkconfig --add arpwatch
+if test -r /var/run/arpwatch.pid; then
+	/etc/rc.d/init.d/arpwatch restart 1>&2
+else
+	echo "Run \"/etc/rc.d/init.d/arpwatch start\" to start arpwatch daemon."
+fi
 
-%preun 
-chkconfig --del arpwatch
+%preun
+/sbin/chkconfig --del arpwatch
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del arpwatch
+	/etc/rc.d/init.d/arpwatch stop 1>&2
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc    README.gz CHANGES.gz
+%doc README.gz CHANGES.gz
 
+%attr(754,root,root) /etc/rc.d/init.d/arpwatch
 %attr(755,root,root) %{_sbindir}/*
 
 %{_mandir}/man8/*
-
-%attr(754,root,root) /etc/rc.d/init.d/arpwatch
 
 %dir    /var/db/arpwatch
 %config(noreplace) %verify(not size mtime md5) /var/db/arpwatch/arp.dat
