@@ -36,7 +36,8 @@ make ARPDIR=/var/state/arpwatch
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{var/state/arpwatch,etc/rc.d/init.d,%{_sbindir},%{_mandir}/man8}
+install -d $RPM_BUILD_ROOT/{var/state/arpwatch,etc/{rc.d/init.d,sysconfig}} \
+	$RPM_BUILD_ROOT%{_sbindir},%{_mandir}/man8}
 
 make install install-man DESTDIR=$RPM_BUILD_ROOT
 
