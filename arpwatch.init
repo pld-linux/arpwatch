@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 #
 # chkconfig: - 55 45
 # description:	The arpwatch daemon attempts to keep track of ethernet/ip \
@@ -12,7 +12,7 @@
 . /etc/sysconfig/network
 
 # Check that networking is up.
-if [ ${NETWORKING} = "no" ]
+if [ "${NETWORKING}" = "no" ]
 then
 	exit 0
 fi
@@ -21,7 +21,7 @@ fi
 case "$1" in
   start)
 	show Starting arpwatch:
-	daemon arpwatch
+	daemon +2 arpwatch
 	touch /var/lock/subsys/arpwatch
 	;;
   stop)
@@ -37,7 +37,7 @@ case "$1" in
 	$0 start
 	;;
   *)
-	echo "Usage: arpwatch {start|stop|status|restart|reload}"
+	echo "Usage: $0 {start|stop|status|restart|reload}"
 	exit 1
 esac
 
