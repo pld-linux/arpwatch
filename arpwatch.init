@@ -34,8 +34,8 @@ case "$1" in
 		fi
 		for IFC in $INTERFACES; do
 			msg_stopping "arpwatch"
-			touch /var/state/arpwatch/$IFC.dat
-			daemon arpwatch -i $IFC -f /var/state/arpwatch/$IFC.dat
+			touch /var/lib/arpwatch/$IFC.dat
+			daemon arpwatch -i $IFC -f /var/lib/arpwatch/$IFC.dat
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/arpwatch
 		done
