@@ -28,7 +28,7 @@ else
 fi
 
 if is_yes "${NO_BOGON}"; then
-	GLOBAL_OPTIONS="-N"
+	GLOBAL_OPTIONS="$GLOBAL_OPTIONS -N"
 else
 	if [ -n "${LOCAL_NETWORKS}" ]; then
 		for i in ${LOCAL_NETWORKS}; do
