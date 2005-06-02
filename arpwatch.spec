@@ -5,7 +5,7 @@ Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
 Version:	2.1a13
-Release:	2
+Release:	3
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
@@ -33,6 +33,8 @@ Patch22:	%{name}-debian_24from_field.patch
 Patch23:	%{name}-debian_25ignore_zero_ip.patch
 Patch24:	%{name}-debian_26unconf_iface.patch
 BuildRequires:	libpcap-devel
+BuildRequires:	autoconf
+BuildRequires:	automake
 PreReq:		rc-scripts >= 0.2.0
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -79,6 +81,8 @@ Dodatkowo tworzona jest baza par adresСw ethernet/IP.
 
 %build
 cp -f /usr/share/automake/config.sub .
+%{__aclocal}
+%{__autoconf}
 %configure
 
 %{__make} \
