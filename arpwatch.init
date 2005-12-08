@@ -77,7 +77,7 @@ case "$1" in
 		rm -f /var/lock/subsys/arpwatch >/dev/null 2>&1
 	else
 		msg_not_running "arpwatch"
-	fi	
+	fi
 	;;
   status)
 	status arpwatch
