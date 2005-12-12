@@ -32,10 +32,10 @@ Patch21:	%{name}-debian_22secure_tempfile.patch
 Patch22:	%{name}-debian_24from_field.patch
 Patch23:	%{name}-debian_25ignore_zero_ip.patch
 Patch24:	%{name}-debian_26unconf_iface.patch
-BuildRequires:	libpcap-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
-PreReq:		rc-scripts >= 0.2.0
+BuildRequires:	libpcap-devel
+Requires:	rc-scripts >= 0.2.0
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -128,10 +128,10 @@ fi
 %doc README CHANGES
 %attr(754,root,root) /etc/rc.d/init.d/arpwatch
 %attr(755,root,root) %{_sbindir}/*
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/arpwatch
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/arpwatch
 %{_datadir}/%{name}
 %{_mandir}/man8/*
 %attr(750,daemon,root) %dir /var/lib/arpwatch
-%attr(644,daemon,root) %config(noreplace) %verify(not size mtime md5) /var/lib/arpwatch/arp.dat
+%attr(644,daemon,root) %config(noreplace) %verify(not md5 mtime size) /var/lib/arpwatch/arp.dat
 %attr(755,daemon,root) /var/lib/arpwatch/*.awk
 %attr(755,daemon,root) /var/lib/arpwatch/*massagevendor*
