@@ -35,8 +35,9 @@ Patch24:	%{name}-debian_26unconf_iface.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libpcap-devel
-Requires:	rc-scripts >= 0.2.0
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts >= 0.2.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -109,17 +110,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add arpwatch
-if [ -f /var/lock/subsys/arpwatch ]; then
-	/etc/rc.d/init.d/arpwatch restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/arpwatch start\" to start arpwatch daemon."
-fi
+%service arpwatch restart "arpwatch daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/arpwatch ]; then
-		/etc/rc.d/init.d/arpwatch stop 1>&2
-	fi
+	%service arpwatch stop
 	/sbin/chkconfig --del arpwatch
 fi
 
