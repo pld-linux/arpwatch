@@ -1,0 +1,4 @@
+- use daemon user to start arpwatch
+- new doc
+- proper permisions to arpwatch directory
+  STBR
