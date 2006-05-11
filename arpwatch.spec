@@ -1,11 +1,10 @@
-
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl):	Arpwatch monitoruje zmiany w parach adresСw ethernet/ip
 Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
 Version:	2.1a13
-Release:	3
+Release:	4
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
