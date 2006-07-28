@@ -3,13 +3,13 @@ Summary(pl):	Arpwatch monitoruje zmiany w parach adresСw ethernet/ip
 Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
 Name:		arpwatch
-Version:	2.1a13
-Release:	4
+Version:	2.1a14
+Release:	0.9
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.gz
-# Source0-md5:	b9ff9739cdd2c0e9807b2d05860e4811
+# Source0-md5:	a80f26ba58012755dbb9fd99fb3af660
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	dmassagevendor
@@ -99,7 +99,7 @@ install -d $RPM_BUILD_ROOT{/var/lib/arpwatch,/etc/{rc.d/init.d,sysconfig}} \
 install arp2ethers arpfetch bihourly $RPM_BUILD_ROOT%{_sbindir}
 install *.{awk,dat} massagevendor{,-old} %{SOURCE3} $RPM_BUILD_ROOT/var/lib/arpwatch
 install *.8 %{SOURCE4} $RPM_BUILD_ROOT%{_mandir}/man8
-install ethercodes.dat missingcodes.txt $RPM_BUILD_ROOT%{_datadir}/%{name}
+install ethercodes.dat $RPM_BUILD_ROOT%{_datadir}/%{name}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/arpwatch
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/arpwatch
