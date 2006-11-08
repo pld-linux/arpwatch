@@ -10,7 +10,7 @@ INTERFACES=
 # informations about bogons:
 #NO_BOGON="yes"
 
-# Additional local networks - usefull to avoid bogus bogons messages. You
+# Additional local networks - useful to avoid bogus bogon messages. You
 # can add here networks that are _not_ in your networks on interfaces.
 # Works only when NO_BOGON is not set. Multiple networks can be set here.
 # Globally
