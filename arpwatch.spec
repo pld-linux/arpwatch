@@ -1,7 +1,7 @@
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
-Summary(pl.UTF-8):   Arpwatch monitoruje zmiany w parach adresów ethernet/ip
-Summary(ru.UTF-8):   Инструмент для отслеживания IP адресов в локальной сети
-Summary(uk.UTF-8):   Інструмент для відслідковування IP адрес в локальній мережі
+Summary(pl.UTF-8):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
+Summary(ru.UTF-8):	Инструмент для отслеживания IP адресов в локальной сети
+Summary(uk.UTF-8):	Інструмент для відслідковування IP адрес в локальній мережі
 Name:		arpwatch
 Version:	2.1a14
 Release:	0.9
