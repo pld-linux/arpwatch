@@ -1,7 +1,7 @@
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
-Summary(pl):	Arpwatch monitoruje zmiany w parach adresСw ethernet/ip
-Summary(ru):	Инструмент для отслеживания IP адресов в локальной сети
-Summary(uk):	╤нструмент для в╕дсл╕дковування IP адрес в локальн╕й мереж╕
+Summary(pl.UTF-8):   Arpwatch monitoruje zmiany w parach adresцЁw ethernet/ip
+Summary(ru.UTF-8):   п≤п╫я│я┌я─я┐п╪п╣п╫я┌ п╢п╩я▐ п╬я┌я│п╩п╣п╤п╦п╡п╟п╫п╦я▐ IP п╟п╢я─п╣я│п╬п╡ п╡ п╩п╬п╨п╟п╩я▄п╫п╬п╧ я│п╣я┌п╦
+Summary(uk.UTF-8):   п├п╫я│я┌я─я┐п╪п╣п╫я┌ п╢п╩я▐ п╡я√п╢я│п╩я√п╢п╨п╬п╡я┐п╡п╟п╫п╫я▐ IP п╟п╢я─п╣я│ п╡ п╩п╬п╨п╟п╩я▄п╫я√п╧ п╪п╣я─п╣п╤я√
 Name:		arpwatch
 Version:	2.1a14
 Release:	0.9
@@ -43,21 +43,21 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Arpwatch and arpsnmp are tools that monitors ethernet or FDDI activity
 and maintain a database of ethernet/IP address pairings.
 
-%description -l pl
-Arpwatch i arpsnmp to narzЙdzia do monitorowania ethernetu i FDDI.
-Dodatkowo tworzona jest baza par adresСw ethernet/IP.
+%description -l pl.UTF-8
+Arpwatch i arpsnmp to narzд≥dzia do monitorowania ethernetu i FDDI.
+Dodatkowo tworzona jest baza par adresцЁw ethernet/IP.
 
-%description -l ru
-Пакет arpwatch содержит утилиты arpwatch и arpsnmp. Они производят
-мониторинг траффика в сетях Ethernet или FDDI и строят базы данных
-адресных пар Ethernet/IP. Изменения в таких парах могут сообщаться при
-помощи e-mail.
+%description -l ru.UTF-8
+п÷п╟п╨п╣я┌ arpwatch я│п╬п╢п╣я─п╤п╦я┌ я┐я┌п╦п╩п╦я┌я▀ arpwatch п╦ arpsnmp. п·п╫п╦ п©я─п╬п╦п╥п╡п╬п╢я▐я┌
+п╪п╬п╫п╦я┌п╬я─п╦п╫пЁ я┌я─п╟я└я└п╦п╨п╟ п╡ я│п╣я┌я▐я┘ Ethernet п╦п╩п╦ FDDI п╦ я│я┌я─п╬я▐я┌ п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘
+п╟п╢я─п╣я│п╫я▀я┘ п©п╟я─ Ethernet/IP. п≤п╥п╪п╣п╫п╣п╫п╦я▐ п╡ я┌п╟п╨п╦я┘ п©п╟я─п╟я┘ п╪п╬пЁя┐я┌ я│п╬п╬п╠я┴п╟я┌я▄я│я▐ п©я─п╦
+п©п╬п╪п╬я┴п╦ e-mail.
 
-%description -l uk
-Пакет arpwatch м╕стить утил╕ти arpwatch та arpsnmp. Вони проводять
-мон╕торинг траф╕ку в Ethernet чи FDDI мережах та будують бази даних
-адресних пар Ethernet/IP. Зм╕ни в таких парах можуть пов╕домлятись за
-допомогою e-mail.
+%description -l uk.UTF-8
+п÷п╟п╨п╣я┌ arpwatch п╪я√я│я┌п╦я┌я▄ я┐я┌п╦п╩я√я┌п╦ arpwatch я┌п╟ arpsnmp. п▓п╬п╫п╦ п©я─п╬п╡п╬п╢я▐я┌я▄
+п╪п╬п╫я√я┌п╬я─п╦п╫пЁ я┌я─п╟я└я√п╨я┐ п╡ Ethernet я┤п╦ FDDI п╪п╣я─п╣п╤п╟я┘ я┌п╟ п╠я┐п╢я┐я▌я┌я▄ п╠п╟п╥п╦ п╢п╟п╫п╦я┘
+п╟п╢я─п╣я│п╫п╦я┘ п©п╟я─ Ethernet/IP. п≈п╪я√п╫п╦ п╡ я┌п╟п╨п╦я┘ п©п╟я─п╟я┘ п╪п╬п╤я┐я┌я▄ п©п╬п╡я√п╢п╬п╪п╩я▐я┌п╦я│я▄ п╥п╟
+п╢п╬п©п╬п╪п╬пЁп╬я▌ e-mail.
 
 %prep
 %setup  -q
