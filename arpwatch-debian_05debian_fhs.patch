@@ -81,23 +81,23 @@ diff -u arpwatch/arpwatch.h:1.1.1.1 arpwatch/arpwatch.h:1.1.1.1.10.1
  #define MEMCMP(a, b, n) memcmp((char *)a, (char *)b, n)
 Index: arpwatch/bihourly
 diff -u arpwatch/bihourly:1.1.1.1 arpwatch/bihourly:1.1.1.1.10.1
---- arpwatch/bihourly:1.1.1.1	Tue Apr 17 13:31:36 2001
-+++ arpwatch/bihourly	Tue Apr 17 13:53:29 2001
+--- arpwatch/bihourly.sh.orig	2006-07-28 18:19:45.000000000 +0000
++++ arpwatch/bihourly.sh	2007-09-16 15:02:47.902987779 +0000
 @@ -6,7 +6,7 @@
- PATH=$PATH:/usr/local/sbin
+ PATH=${PATH}:/usr/local/sbin
  export PATH
  #
 -cd /usr/operator/arpwatch
 +cd /var/lib/arpwatch
  #
- list=`cat list`
- cname=`cat cname`
-@@ -14,7 +14,7 @@
- #
+ list="`cat list`"
+ cname="`cat cname`"
+@@ -26,7 +26,7 @@
+ 
  alist=""
- for r in $list; do \
--	./arpfetch $r $cname > $r 2> $errs
-+	arpfetch $r $cname > $r 2> $errs
- 	if test -s $errs; then
- 		echo "arpfetch $r failed:"
- 		sed -e 's/^/    /' $errs
+ for r in ${list}; do \
+-	./arpfetch ${r} ${cname} > ${r} 2> ${temp1}
++	arpfetch ${r} ${cname} > ${r} 2> ${temp1}
+ 	if [ -s ${temp1} ]; then
+ 		echo "arpfetch ${r} errors:"
+ 		xr=${d}/${r}.$$
