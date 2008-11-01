@@ -4,7 +4,7 @@ Summary(ru.UTF-8):	Инструмент для отслеживания IP ад�
 Summary(uk.UTF-8):	Інструмент для відслідковування IP адрес в локальній мережі
 Name:		arpwatch
 Version:	2.1a15
-Release:	1
+Release:	2
 Epoch:		2
 License:	GPL
 Group:		Applications/Networking
