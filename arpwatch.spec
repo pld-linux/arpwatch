@@ -1,6 +1,3 @@
-# TODO
-# - grab diff from this commit:
-#   http://github.com/mcr/libpcap/commit/d1a3a92fab103210ab5f61780a731bce9a8909b5
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl.UTF-8):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
 Summary(ru.UTF-8):	Инструмент для отслеживания IP адресов в локальной сети
@@ -34,6 +31,7 @@ Patch21:	%{name}-debian_22secure_tempfile.patch
 Patch22:	%{name}-debian_24from_field.patch
 Patch23:	%{name}-debian_25ignore_zero_ip.patch
 Patch24:	%{name}-debian_26unconf_iface.patch
+Patch25:	ac264.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libpcap-devel
@@ -81,6 +79,7 @@ Dodatkowo tworzona jest baza par adresów ethernet/IP.
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
+%patch25 -p0
 
 %build
 cp -f /usr/share/automake/config.sub .
