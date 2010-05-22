@@ -7,7 +7,7 @@ Version:	2.1a15
 Release:	4
 Epoch:		2
 License:	GPL
-Group:		Applications/Networking
+Group:		Networking/Daemons
 Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.gz
 # Source0-md5:	cebfeb99c4a7c2a6cee2564770415fe7
 Source1:	%{name}.init
