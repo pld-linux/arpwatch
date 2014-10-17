@@ -1,15 +1,15 @@
 diff -u arpwatch-2.1a4/Makefile.in arpwatch-2.1a4.new/Makefile.in
 --- arpwatch-2.1a4/Makefile.in	Wed Jul 29 07:16:45 1998
 +++ arpwatch-2.1a4.new/Makefile.in	Wed Feb 17 00:54:19 1999
-@@ -43,7 +43,7 @@
- 
+@@ -45,7 +45,7 @@
  CC = @CC@
+ PROG = arpwatch
  CCOPT = @V_CCOPT@
 -INCLS = -I. @V_INCLS@
 +INCLS = -I. @V_INCLS@ -I/usr/include/pcap
- DEFS = -DDEBUG @DEFS@ -DARPDIR=\"$(ARPDIR)\" -DPATH_SENDMAIL=\"$(SENDMAIL)\"
+ DEFS = -DDEBUG @DEFS@ -DARPDIR=\"$(ARPDIR)\" -DPATH_SENDMAIL=\"$(SENDMAIL)\" \
+ 	-DETHERCODES=\"$(ETHERCODES)\"
  
- # Standard CFLAGS
 @@ -109,13 +109,13 @@
  	$(CC) $(CFLAGS) -o $@ zap.o intoa.o -lutil
  

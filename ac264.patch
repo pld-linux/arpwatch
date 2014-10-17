@@ -89,3 +89,4 @@ based on http://github.com/mcr/libpcap/commit/d1a3a92fab103210ab5f61780a731bce9a
      if test "$GCC" != yes ; then
  	    AC_MSG_CHECKING(that $CC handles ansi prototypes)
  	    AC_CACHE_VAL(ac_cv_lbl_cc_ansi_prototypes,
+
