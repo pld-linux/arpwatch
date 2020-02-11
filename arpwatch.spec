@@ -15,7 +15,7 @@ Source2:	%{name}.sysconfig
 Source3:	dmassagevendor
 Source4:	dmassagevendor.8
 Patch0:		%{name}-opt.patch
-Patch1:		ftp://ftp.debian.org/debian/pool/main/a/arpwatch/arpwatch_2.1a15-1.2.diff.gz
+Patch1:		http://ftp.debian.org/debian/pool/main/a/arpwatch/arpwatch_2.1a15-1.2.diff.gz
 # Patch1-md5:	ea6ac9531289f04219349d0faca7cde5
 Patch2:		ac264.patch
 Patch3:		%{name}-makefile.patch
