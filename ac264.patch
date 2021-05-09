@@ -1,18 +1,8 @@
 based on http://github.com/mcr/libpcap/commit/d1a3a92fab103210ab5f61780a731bce9a8909b5
---- configure.in.orig	2010-04-08 14:13:14.128949704 +0200
-+++ configure.in	2010-04-08 14:08:22.642391622 +0200
-@@ -21,6 +21,8 @@
- 
- AC_CANONICAL_SYSTEM
- 
-+AC_LBL_C_INIT_BEFORE_CC(V_CCOPT, V_INCLS)
-+AC_PROG_CC
- AC_LBL_C_INIT(V_CCOPT, V_INCLS)
- AC_LBL_C_INLINE
- AC_C___ATTRIBUTE__
---- aclocal.m4.orig	2010-04-08 14:16:43.134795418 +0200
-+++ aclocal.m4	2010-04-08 14:19:50.183311589 +0200
-@@ -23,29 +23,22 @@
+diff -urNp -x '*.orig' arpwatch-2.1a15.org/aclocal.m4 arpwatch-2.1a15/aclocal.m4
+--- arpwatch-2.1a15.org/aclocal.m4	2021-05-09 14:37:46.275738586 +0200
++++ arpwatch-2.1a15/aclocal.m4	2021-05-09 14:37:46.332408198 +0200
+@@ -23,29 +23,22 @@ dnl LBL autoconf macros
  dnl
  
  dnl
@@ -28,12 +18,6 @@ based on http://github.com/mcr/libpcap/commit/d1a3a92fab103210ab5f61780a731bce9a
  dnl	AC_LBL_C_INIT(copt, incls)
  dnl
 -dnl results:
--dnl
--dnl	$1 (copt set)
--dnl	$2 (incls set)
--dnl	CC
--dnl	LDFLAGS
--dnl	LBL_CFLAGS
 +dnl It appears that newer versions of autoconf (2.64 and later) will,
 +dnl if you use AC_TRY_COMPILE in a macro, stick AC_PROG_CC at the
 +dnl beginning of the macro, even if the macro itself calls AC_PROG_CC.
@@ -45,6 +29,12 @@ based on http://github.com/mcr/libpcap/commit/d1a3a92fab103210ab5f61780a731bce9a
 +dnl calling AC_PROG_CC, and then doing the tests we now do in
 +dnl AC_LBL_C_INIT.
  dnl
+-dnl	$1 (copt set)
+-dnl	$2 (incls set)
+-dnl	CC
+-dnl	LDFLAGS
+-dnl	LBL_CFLAGS
+-dnl
 -AC_DEFUN(AC_LBL_C_INIT,
 -    [AC_PREREQ(2.12)
 -    AC_BEFORE([$0], [AC_PROG_CC])
@@ -55,7 +45,7 @@ based on http://github.com/mcr/libpcap/commit/d1a3a92fab103210ab5f61780a731bce9a
      AC_ARG_WITH(gcc, [  --without-gcc           don't use gcc])
      $2=""
      if test "${srcdir}" != "." ; then
-@@ -70,7 +63,32 @@
+@@ -70,7 +63,32 @@ AC_DEFUN(AC_LBL_C_INIT,
  	    CC=cc
  	    export CC
      fi
@@ -89,4 +79,15 @@ based on http://github.com/mcr/libpcap/commit/d1a3a92fab103210ab5f61780a731bce9a
      if test "$GCC" != yes ; then
  	    AC_MSG_CHECKING(that $CC handles ansi prototypes)
  	    AC_CACHE_VAL(ac_cv_lbl_cc_ansi_prototypes,
-
+diff -urNp -x '*.orig' arpwatch-2.1a15.org/configure.in arpwatch-2.1a15/configure.in
+--- arpwatch-2.1a15.org/configure.in	2006-06-21 22:34:29.000000000 +0200
++++ arpwatch-2.1a15/configure.in	2021-05-09 14:37:46.332408198 +0200
+@@ -16,6 +16,8 @@ if test -z "$PWD" ; then
+ 	PWD=`pwd`
+ fi
+ 
++AC_LBL_C_INIT_BEFORE_CC(V_CCOPT, V_INCLS)
++AC_PROG_CC
+ AC_LBL_C_INIT(V_CCOPT, V_INCLS)
+ 
+ AC_CHECK_HEADERS(fcntl.h memory.h)
