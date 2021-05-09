@@ -4,7 +4,7 @@ Summary(ru.UTF-8):	Инструмент для отслеживания IP ад�
 Summary(uk.UTF-8):	Інструмент для відслідковування IP адрес в локальній мережі
 Name:		arpwatch
 Version:	2.1a15
-Release:	5
+Release:	6
 Epoch:		2
 License:	GPL
 Group:		Networking/Daemons
@@ -14,11 +14,9 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	dmassagevendor
 Source4:	dmassagevendor.8
+Source5:	https://ftp.debian.org/debian/pool/main/a/arpwatch/arpwatch_2.1a15-8.debian.tar.xz
+# Source5-md5:	5e1a6414ae8cb98af3e0691be062a3d5
 Patch0:		%{name}-opt.patch
-Patch1:		http://ftp.debian.org/debian/pool/main/a/arpwatch/arpwatch_2.1a15-1.2.diff.gz
-# Patch1-md5:	ea6ac9531289f04219349d0faca7cde5
-Patch2:		ac264.patch
-Patch3:		%{name}-makefile.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libpcap-devel
@@ -48,11 +46,11 @@ Dodatkowo tworzona jest baza par adresów ethernet/IP.
 допомогою e-mail.
 
 %prep
-%setup  -q
+%setup  -q -a5
+for p in $(cat debian/patches/series); do
+	patch -p1 < "debian/patches/$p" || exit 1
+done
 %patch0 -p1
-%patch1 -p1
-%patch2 -p0
-%patch3 -p1
 
 %build
 cp -f /usr/share/automake/config.sub .

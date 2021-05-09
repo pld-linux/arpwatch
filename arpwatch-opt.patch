@@ -8,4 +8,4 @@ diff -urN arpwatch-2.1a10.org/aclocal.m4 arpwatch-2.1a10/aclocal.m4
 -    $1="-O"
      $2=""
      if test "${srcdir}" != "." ; then
- 	    $2="-I\$\(srcdir\)"
+ 	    $2="-I\$(srcdir)"
