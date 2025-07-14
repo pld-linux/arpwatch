@@ -50,7 +50,7 @@ Dodatkowo tworzona jest baza par adresów ethernet/IP.
 for p in $(cat debian/patches/series); do
 	patch -p1 < "debian/patches/$p" || exit 1
 done
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 cp -f /usr/share/automake/config.sub .
