@@ -1,5 +1,5 @@
 #
-# oui.csv is published without a version, so it is snapshotted by date
+# ethernet vendor table, regenerate with ./update-source.sh
 %define		ouidate	20260816
 #
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
@@ -17,8 +17,8 @@ Source0:	https://ee.lbl.gov/downloads/%{name}/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}@.service
-Source4:	https://standards-oui.ieee.org/oui/oui.csv?/oui-%{ouidate}.csv
-# Source4-md5:	411302ab553163fc88effb8c3c842951
+Source4:	ethercodes-%{ouidate}.dat.xz
+# Source4-md5:	ee731a1b4a43ed938fcd53f430c1ef6d
 Patch0:		%{name}-time.patch
 Patch1:		%{name}-c99.patch
 Patch2:		%{name}-user.patch
@@ -34,8 +34,8 @@ Patch11:	%{name}-nolocal.patch
 URL:		https://ee.lbl.gov/
 BuildRequires:	autoconf >= 2.71
 BuildRequires:	libpcap-devel
-BuildRequires:	python3
 BuildRequires:	rpmbuild(macros) >= 1.671
+BuildRequires:	xz
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,postun):	systemd-units >= 38
 Requires:	rc-scripts >= 0.2.0
@@ -90,9 +90,6 @@ Dodatkowo tworzona jest baza par adresów ethernet/IP.
 %{__make} \
 	ARPDIR=/var/lib/%{name}
 
-# upstream fetches oui.csv over the network, which is not available here
-%{__python3} massagevendor.py < %{SOURCE4} > ethercodes.dat
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{systemdunitdir}} \
@@ -108,7 +105,8 @@ install arp2ethers arpfetch $RPM_BUILD_ROOT%{_sbindir}
 install massagevendor.py $RPM_BUILD_ROOT%{_sbindir}/massagevendor
 install bihourly.sh $RPM_BUILD_ROOT%{_sbindir}/bihourly
 install *.awk $RPM_BUILD_ROOT/var/lib/%{name}
-install -m 644 arp.dat ethercodes.dat $RPM_BUILD_ROOT/var/lib/%{name}
+install -m 644 arp.dat $RPM_BUILD_ROOT/var/lib/%{name}
+%{__xz} -dc %{SOURCE4} > $RPM_BUILD_ROOT/var/lib/%{name}/ethercodes.dat
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
