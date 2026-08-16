@@ -31,6 +31,7 @@ Patch8:		%{name}-arpfetch.patch
 Patch9:		%{name}-path.patch
 Patch10:	%{name}-quiet.patch
 Patch11:	%{name}-nolocal.patch
+Patch12:	%{name}-filter.patch
 URL:		https://ee.lbl.gov/
 BuildRequires:	autoconf >= 2.71
 BuildRequires:	libpcap-devel
@@ -77,6 +78,7 @@ Dodatkowo tworzona jest baza par adresów ethernet/IP.
 %patch -P9 -p1
 %patch -P10 -p1
 %patch -P11 -p1
+%patch -P12 -p1
 
 # the database directory is hardwired in the manuals and scripts
 %{__sed} -i -e 's|/usr/local/arpwatch|/var/lib/%{name}|g' *.8.in *.sh.in *.sh

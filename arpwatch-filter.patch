@@ -1,0 +1,85 @@
+Add -B to specify an additional pcap filter expression, for ignoring hosts
+that are known to be noisy.
+
+PLD carried this as -F from the Debian patchset (Debian #600886) until 3.9,
+where upstream took -F for the foreground flag.
+
+--- arpwatch-3.9.orig/arpwatch.c	2026-08-16 20:52:08.675872764 +0200
++++ arpwatch-3.9/arpwatch.c	2026-08-16 20:52:08.769468541 +0200
+@@ -203,6 +203,7 @@
+ 	char *interface, *rfilename;
+ 	struct bpf_program code;
+ 	char errbuf[PCAP_ERRBUF_SIZE];
++	char *filter, *filter_user, filterbuf[1024];
+ 	char* serveruser = NULL;
+ 
+ 	if (argv[0] == NULL)
+@@ -220,10 +221,15 @@
+ 	opterr = 0;
+ 	interface = NULL;
+ 	rfilename = NULL;
++	filter_user = NULL;
+ 	pd = NULL;
+-	while ((op = getopt(argc, argv, "CdD:Ff:i:n:NpP:qr:svw:W:x:zZu:")) != EOF)
++	while ((op = getopt(argc, argv, "B:CdD:Ff:i:n:NpP:qr:svw:W:x:zZu:")) != EOF)
+ 		switch (op) {
+ 
++		case 'B':
++			filter_user = optarg;
++			break;
++
+ 		case 'C':
+ 			zeropad = 0;
+ 			break;
+@@ -434,7 +440,16 @@
+ 	}
+ 
+ 	/* Compile and install filter */
+-	if (pcap_compile(pd, &code, "arp or rarp", 1, netmask) < 0) {
++	filter = "arp or rarp";
++	if (filter_user != NULL) {
++		if (snprintf(filterbuf, sizeof(filterbuf),
++		    "(arp or rarp) and (%s)", filter_user) >= (int)sizeof(filterbuf)) {
++			lg(LOG_ERR, "filter too long");
++			exit(1);
++		}
++		filter = filterbuf;
++	}
++	if (pcap_compile(pd, &code, filter, 1, netmask) < 0) {
+ 		lg(LOG_ERR, "pcap_compile: %s", pcap_geterr(pd));
+ 		exit(1);
+ 	}
+@@ -980,7 +995,7 @@
+ {
+ 	(void)fprintf(stderr, "Version %s\n", version);
+ 	(void)fprintf(stderr,
+-	    "usage: %s [-CdFNpqsvzZ] [-D arpdir] [-f datafile]"
++	    "usage: %s [-CdFNpqsvzZ] [-B filter] [-D arpdir] [-f datafile]"
+ 	    " [-i interface]\n\t"
+ 	    " [-P pidfile] [-w watcher@email] [-W watchee@email]\n\t"
+ 	    " [-n net[/width]] [-x net[/width]] [-r file] [-u username]\n",
+--- arpwatch-3.9.orig/arpwatch.8.in	2026-08-16 20:52:08.667398559 +0200
++++ arpwatch-3.9/arpwatch.8.in	2026-08-16 20:52:08.772816820 +0200
+@@ -34,6 +34,7 @@
+ .Sh SYNOPSIS
+ .Nm
+ .Op Fl CdFNpqsvzZ
++.Op Fl B Ar filter
+ .Op Fl D Ar arpdir
+ .Op Fl f Ar datafile
+ .Op Fl i Ar interface
+@@ -63,6 +64,14 @@
+ pair.
+ .Pp
+ The
++.Fl B
++flag specifies an additional
++.Xr pcap-filter 7
++expression to narrow what is captured; the effective filter becomes
++.Dq (arp or rarp) and ( Ns Ar filter Ns Dq ) .
++This is useful to ignore hosts that are known to be noisy.
++.Pp
++The
+ .Fl C
+ flag@MANCFLAG@ uses compact padded ethernet addresses in
+ .Ar arp.dat ,
