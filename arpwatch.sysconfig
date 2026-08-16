@@ -5,9 +5,8 @@ SERVICE_RUN_NICE_LEVEL="+5"
 # this and builds its own option list from the settings below.
 ARPWATCH_OPTS=""
 
-# Extra arpwatch options. -B takes a pcap-filter(7) expression to ignore noisy
-# hosts; it was spelled -F before 3.9, where upstream took -F for something else.
-#GLOBAL_OPTIONS="-B 'not host 192.168.1.1 and not ether host 00:11:22:33:44:55'"
+# pcap filter is -B now, was -F
+#GLOBAL_OPTIONS=""
 
 # Name of monitored interfaces
 INTERFACES=

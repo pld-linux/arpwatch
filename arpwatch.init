@@ -45,7 +45,7 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/arpwatch ]; then
 		if [ -z "$INTERFACES" ]; then
 			INTERFACES="`/sbin/ip link show \
-			  | egrep '^[^ ].*' |egrep -v "NOARP|LOOPBACK" \
+			  | grep -E '^[^ ].*' |grep -E -v "NOARP|LOOPBACK" \
 			  |sed 's/[0-9]*: \([a-zA-Z0-9]*\)[@:].*/\1/'|xargs`"
 		fi
 		[ ! -z "$NETWORKS" ] && NETWORKS="-n $NETWORKS"
