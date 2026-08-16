@@ -1,0 +1,17 @@
+[Unit]
+Description=Ethernet/IP address pairing monitor on %I
+Documentation=man:arpwatch(8)
+After=network.target sys-subsystem-net-devices-%i.device
+BindsTo=sys-subsystem-net-devices-%i.device
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=2
+EnvironmentFile=-/etc/sysconfig/arpwatch
+# arpwatch refuses to start when its database is missing
+ExecStartPre=/bin/sh -c 'test -f /var/lib/arpwatch/%I.dat || /usr/bin/install -m 644 -o daemon -g root /dev/null /var/lib/arpwatch/%I.dat'
+ExecStart=/usr/sbin/arpwatch -F -u daemon -i %I -f /var/lib/arpwatch/%I.dat $ARPWATCH_OPTS
+
+[Install]
+WantedBy=multi-user.target sys-subsystem-net-devices-%i.device

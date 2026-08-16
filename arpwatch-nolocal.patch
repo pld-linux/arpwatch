@@ -1,0 +1,14 @@
+Do not force /usr/local/include and /usr/local/lib into the build; on a
+developer box they shadow the libraries the package was built against.
+
+--- arpwatch-3.9.orig/aclocal.m4	2023-09-05 19:40:09.000000000 +0200
++++ arpwatch-3.9/aclocal.m4	2026-08-16 20:19:09.030178271 +0200
+@@ -84,8 +84,6 @@
+ 	    CC=cc
+ 	    export CC
+     fi
+-    $2="$$2 -I/usr/local/include"
+-    LDFLAGS="$LDFLAGS -L/usr/local/lib"
+     if test "$GCC" != yes ; then
+ 	    AC_MSG_CHECKING(that $CC handles ansi prototypes)
+ 	    AC_CACHE_VAL(ac_cv_lbl_cc_ansi_prototypes,

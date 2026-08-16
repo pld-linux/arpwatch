@@ -1,0 +1,12 @@
+Drop a stray rm of a variable that is never set.
+
+Origin: Fedora, sent upstream 2021-04-24.
+
+--- arpwatch-3.9.orig/arpfetch	2013-02-16 09:10:28.000000000 +0100
++++ arpwatch-3.9/arpfetch	2026-08-16 19:34:20.402723222 +0200
+@@ -29,5 +29,3 @@
+ 	    ea = $2
+ 	    print ea "\t" ip
+     }'
+-
+-rm -f ${t1}

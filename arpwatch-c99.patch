@@ -1,0 +1,20 @@
+_getshort() is a glibc function that has not been declared by the installed
+headers for many years; use ns_get16() instead.
+
+Origin: Fedora, sent upstream 2023-02-01.
+
+--- arpwatch-3.9.orig/dns.c	2023-09-05 19:50:56.000000000 +0200
++++ arpwatch-3.9/dns.c	2026-08-16 19:34:20.319202788 +0200
+@@ -115,10 +115,10 @@
+ 		    (u_char *)cp, (char *)bp, buflen)) < 0)
+ 			break;
+ 		cp += n;
+-		type = _getshort(cp);
++		type = ns_get16(cp);
+ 		cp += sizeof(u_short);			/* class */
+ 		cp += sizeof(u_short) + sizeof(u_int32_t);
+-		n = _getshort(cp);
++		n = ns_get16(cp);
+ 		cp += sizeof(u_short);
+ 		if (type == T_HINFO) {
+ 			/* Unpack */

@@ -1,0 +1,16 @@
+configure no longer defines TIME_WITH_SYS_TIME (autoconf 2.71 dropped
+AC_HEADER_TIME), which left time(), gmtime() and localtime() implicitly
+declared.  <time.h> and <sys/time.h> may be included together everywhere.
+
+--- arpwatch-3.9.orig/report.c	2023-09-05 19:50:56.000000000 +0200
++++ arpwatch-3.9/report.c	2026-08-16 19:34:27.631641402 +0200
+@@ -59,9 +59,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <syslog.h>
+-#ifdef TIME_WITH_SYS_TIME
+ #include <time.h>
+-#endif
+ #include <unistd.h>
+ 
+ #include "gnuc.h"

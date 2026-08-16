@@ -1,28 +1,46 @@
+#
+# oui.csv is published without a version, so it is snapshotted by date
+%define		ouidate	20260816
+#
 Summary:	Arpwatch monitors changes in ethernet/ip address pairings
 Summary(pl.UTF-8):	Arpwatch monitoruje zmiany w parach adresów ethernet/ip
 Summary(ru.UTF-8):	Инструмент для отслеживания IP адресов в локальной сети
 Summary(uk.UTF-8):	Інструмент для відслідковування IP адрес в локальній мережі
 Name:		arpwatch
-Version:	2.1a15
-Release:	6
+Version:	3.9
+Release:	1
 Epoch:		2
-License:	GPL
+License:	BSD
 Group:		Networking/Daemons
-Source0:	ftp://ftp.ee.lbl.gov/%{name}-%{version}.tar.gz
-# Source0-md5:	cebfeb99c4a7c2a6cee2564770415fe7
+Source0:	https://ee.lbl.gov/downloads/%{name}/%{name}-%{version}.tar.gz
+# Source0-md5:	2989e0dea96bb28ab24c30efebe55a33
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Source3:	dmassagevendor
-Source4:	dmassagevendor.8
-Source5:	https://ftp.debian.org/debian/pool/main/a/arpwatch/arpwatch_2.1a15-8.debian.tar.xz
-# Source5-md5:	5e1a6414ae8cb98af3e0691be062a3d5
-Patch0:		%{name}-opt.patch
-BuildRequires:	autoconf
-BuildRequires:	automake
+Source3:	%{name}@.service
+Source4:	https://standards-oui.ieee.org/oui/oui.csv?/oui-%{ouidate}.csv
+# Source4-md5:	411302ab553163fc88effb8c3c842951
+Patch0:		%{name}-time.patch
+Patch1:		%{name}-c99.patch
+Patch2:		%{name}-user.patch
+Patch3:		%{name}-exit.patch
+Patch4:		%{name}-bogon.patch
+Patch5:		%{name}-freebsd.patch
+Patch6:		%{name}-man.patch
+Patch7:		%{name}-arp2ethers.patch
+Patch8:		%{name}-arpfetch.patch
+Patch9:		%{name}-path.patch
+Patch10:	%{name}-quiet.patch
+Patch11:	%{name}-nolocal.patch
+URL:		https://ee.lbl.gov/
+BuildRequires:	autoconf >= 2.71
 BuildRequires:	libpcap-devel
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	python3
+BuildRequires:	rpmbuild(macros) >= 1.671
 Requires(post,preun):	/sbin/chkconfig
+Requires(post,postun):	systemd-units >= 38
 Requires:	rc-scripts >= 0.2.0
+Requires:	smtpdaemon
+Requires:	systemd-units >= 38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -46,60 +64,84 @@ Dodatkowo tworzona jest baza par adresów ethernet/IP.
 допомогою e-mail.
 
 %prep
-%setup  -q -a5
-for p in $(cat debian/patches/series); do
-	patch -p1 < "debian/patches/$p" || exit 1
-done
+%setup -q
 %patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P10 -p1
+%patch -P11 -p1
+
+# the database directory is hardwired in the manuals and scripts
+%{__sed} -i -e 's|/usr/local/arpwatch|/var/lib/%{name}|g' *.8.in *.sh.in *.sh
 
 %build
-cp -f /usr/share/automake/config.sub .
-%{__aclocal}
 %{__autoconf}
-%configure
+%configure \
+	PYTHON=%{__python3} \
+	--with-sendmail=/usr/lib/sendmail
 
 %{__make} \
-	ARPDIR=/var/lib/arpwatch
+	ARPDIR=/var/lib/%{name}
+
+# upstream fetches oui.csv over the network, which is not available here
+%{__python3} massagevendor.py < %{SOURCE4} > ethercodes.dat
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/lib/arpwatch,/etc/{rc.d/init.d,sysconfig}} \
-	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8,%{_var}/lib/%{name}}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig},%{systemdunitdir}} \
+	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man8,/var/lib/%{name}}
 
-%{__make} install install-man \
+%{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install arp2ethers arpfetch $RPM_BUILD_ROOT%{_sbindir}
-install bihourly.sh $RPM_BUILD_ROOT%{_sbindir}/bihourly
-install *.{awk,dat} massagevendor{,-old} %{SOURCE3} $RPM_BUILD_ROOT/var/lib/arpwatch
-install *.8 %{SOURCE4} $RPM_BUILD_ROOT%{_mandir}/man8
-install ethercodes.dat $RPM_BUILD_ROOT%{_var}/lib/%{name}
+# make install uses 555, which keeps debuginfo extraction from writing
+chmod 755 $RPM_BUILD_ROOT%{_sbindir}/arp{snmp,watch}
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/arpwatch
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/arpwatch
+install arp2ethers arpfetch $RPM_BUILD_ROOT%{_sbindir}
+install massagevendor.py $RPM_BUILD_ROOT%{_sbindir}/massagevendor
+install bihourly.sh $RPM_BUILD_ROOT%{_sbindir}/bihourly
+install *.awk $RPM_BUILD_ROOT/var/lib/%{name}
+install -m 644 arp.dat ethercodes.dat $RPM_BUILD_ROOT/var/lib/%{name}
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+install -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{systemdunitdir}/%{name}@.service
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/chkconfig --add arpwatch
-%service arpwatch restart "arpwatch daemon"
+/sbin/chkconfig --add %{name}
+%service %{name} restart "arpwatch daemon"
+%systemd_reload
 
 %preun
 if [ "$1" = "0" ]; then
-	%service arpwatch stop
-	/sbin/chkconfig --del arpwatch
+	%service -q %{name} stop
+	/sbin/chkconfig --del %{name}
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+	%systemd_reload
 fi
 
 %files
 %defattr(644,root,root,755)
 %doc README CHANGES
-%attr(754,root,root) /etc/rc.d/init.d/arpwatch
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/*
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/arpwatch
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+%{systemdunitdir}/%{name}@.service
 %{_mandir}/man8/*
-%attr(750,daemon,root) %dir /var/lib/arpwatch
-%attr(644,daemon,root) %config(noreplace) %verify(not md5 mtime size) /var/lib/arpwatch/arp.dat
-%attr(755,daemon,root) /var/lib/arpwatch/*.awk
-%attr(755,daemon,root) /var/lib/arpwatch/*massagevendor*
-/var/lib/arpwatch/ethercodes.dat
+%attr(750,daemon,root) %dir /var/lib/%{name}
+%attr(644,daemon,root) %config(noreplace) %verify(not md5 mtime size) /var/lib/%{name}/arp.dat
+%attr(755,daemon,root) /var/lib/%{name}/*.awk
+/var/lib/%{name}/ethercodes.dat

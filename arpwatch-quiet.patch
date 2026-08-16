@@ -1,0 +1,15 @@
+The quiet flag is advertised as -q in the option string, the usage message
+and the manual, but the switch handles it as -a, so -q only prints usage
+and the quiet variable can never be set.  arpsnmp.c gets this right.
+
+--- arpwatch-3.9.orig/arpwatch.c	2023-12-03 19:10:05.000000000 +0100
++++ arpwatch-3.9/arpwatch.c	2026-08-16 20:19:09.029540698 +0200
+@@ -252,7 +252,7 @@
+ 			rfilename = optarg;
+ 			break;
+ 
+-		case 'a':
++		case 'q':
+ 			++quiet;
+ 			break;
+ 

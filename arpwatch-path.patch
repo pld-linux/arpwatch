@@ -1,0 +1,39 @@
+Do not prepend /usr/local to PATH in the shipped scripts.
+
+Origin: Fedora, sent upstream 2021-04-24.
+
+--- arpwatch-3.9.orig/arpfetch	2013-02-16 09:10:28.000000000 +0100
++++ arpwatch-3.9/arpfetch	2026-08-16 19:34:20.414989622 +0200
+@@ -4,8 +4,6 @@
+ # arpfetch - collect arp data from a cisco using net-snmp
+ #
+ 
+-export PATH="/usr/local/bin:${PATH}"
+-
+ prog=`basename $0`
+ 
+ if [ $# -ne 2 ]; then
+--- arpwatch-3.9.orig/bihourly.sh	2016-09-17 04:40:54.000000000 +0200
++++ arpwatch-3.9/bihourly.sh	2026-08-16 19:34:20.415334547 +0200
+@@ -3,9 +3,6 @@
+ #
+ #  bihourly arpwatch job
+ #
+-PATH=${PATH}:/usr/local/sbin
+-export PATH
+-#
+ cd /usr/local/arpwatch
+ #
+ list="`cat list`"
+--- arpwatch-3.9.orig/update-ethercodes.sh.in	2025-10-23 21:32:08.000000000 +0200
++++ arpwatch-3.9/update-ethercodes.sh.in	2026-08-16 19:34:20.415660555 +0200
+@@ -6,9 +6,6 @@
+ 
+ prog="`basename $0`"
+ 
+-PATH=/usr/local/bin:${PATH}
+-export PATH
+-
+ t1=`mktemp /tmp/${prog}.1.XXXXXX`
+ 
+ trap 'rm -f ${t1}; exit 1' 1 2 3 15 EXIT

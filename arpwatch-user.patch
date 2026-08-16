@@ -1,0 +1,139 @@
+Add, and document, a -u argument to drop root privileges after the sockets
+have been opened.  Also drops supplementary groups (CVE-2012-2653).
+
+Origin: Fedora, sent upstream 2021-04-24.
+
+--- arpwatch-3.9.orig/arpwatch.c	2023-12-03 19:10:05.000000000 +0100
++++ arpwatch-3.9/arpwatch.c	2026-08-16 19:34:20.333163717 +0200
+@@ -72,6 +72,8 @@
+ #include <syslog.h>
+ #include <unistd.h>
+ 
++#include <grp.h>
++#include <pwd.h>
+ #include <pcap.h>
+ 
+ #include "gnuc.h"
+@@ -172,6 +174,24 @@
+ int	toskip(u_int32_t);
+ void	usage(void) __attribute__((noreturn));
+ 
++void dropprivileges(const char* user)
++{
++	struct passwd* const pw = getpwnam(user);
++	if (pw) {
++		if (setgid(pw->pw_gid) != 0 || setgroups(0, NULL) != 0 ||
++				setuid(pw->pw_uid) != 0) {
++			lg(LOG_ERR, "Couldn't change to '%.32s' uid=%d gid=%d",
++				       user, pw->pw_uid, pw->pw_gid);
++			exit(1);
++		}
++	} else {
++		lg(LOG_ERR, "Couldn't find user '%.32s' in /etc/passwd",
++			       user);
++		exit(1);
++	}
++	lg(LOG_DEBUG, "Running as uid=%d gid=%d", getuid(), getgid());
++}
++
+ int
+ main(int argc, char **argv)
+ {
+@@ -183,6 +203,7 @@
+ 	char *interface, *rfilename;
+ 	struct bpf_program code;
+ 	char errbuf[PCAP_ERRBUF_SIZE];
++	char* serveruser = NULL;
+ 
+ 	if (argv[0] == NULL)
+ 		prog = "arpwatch";
+@@ -200,7 +221,7 @@
+ 	interface = NULL;
+ 	rfilename = NULL;
+ 	pd = NULL;
+-	while ((op = getopt(argc, argv, "CdD:Ff:i:n:NpP:qr:svw:W:x:zZ")) != EOF)
++	while ((op = getopt(argc, argv, "CdD:Ff:i:n:NpP:qr:svw:W:x:zZu:")) != EOF)
+ 		switch (op) {
+ 
+ 		case 'C':
+@@ -285,6 +306,17 @@
+ 			zeropad = 1;
+ 			break;
+ 
++		case 'u':
++			if (optarg) {
++				/* no need to strdup() a pointer into the
++				 * original arguments vector */
++				serveruser = optarg;
++			} else {
++				fprintf(stderr, "%s: Need username after -u\n", prog);
++				usage();
++			}
++			break;
++
+ 		default:
+ 			usage();
+ 		}
+@@ -381,6 +413,11 @@
+ 		}
+ 	}
+ 
++	/* Explicit user change (privilege drop) with -u? */
++	if (serveruser) {
++		dropprivileges(serveruser);
++	}
++
+ 	/*
+ 	 * Revert to non-privileged user after opening sockets
+ 	 * (not needed on most systems).
+@@ -944,6 +981,7 @@
+ 	    "usage: %s [-CdFNpqsvzZ] [-D arpdir] [-f datafile]"
+ 	    " [-i interface]\n\t"
+ 	    " [-P pidfile] [-w watcher@email] [-W watchee@email]\n\t"
+-	    " [-n net[/width]] [-x net[/width]] [-r file]\n", prog);
++	    " [-n net[/width]] [-x net[/width]] [-r file] [-u username]\n",
++	    prog);
+ 	exit(1);
+ }
+--- arpwatch-3.9.orig/arpwatch.8.in	2023-12-03 01:48:53.000000000 +0100
++++ arpwatch-3.9/arpwatch.8.in	2026-08-16 19:34:20.332594915 +0200
+@@ -43,6 +43,7 @@
+ .Op Fl n Ar net[/width]
+ .Op Fl x Ar net[/width]
+ .Op Fl r Ar file
++.Op Fl u Ar username
+ .Sh DESCRIPTION
+ .Nm
+ keeps track of ethernet/ip address pairings. It syslogs activity
+@@ -137,13 +138,30 @@
+ Note that an empty
+ .Ar arp.dat
+ file must be created before the first time you run
+-.Fl arpwatch .
++.Nm .
++Also, the default directory (where
++.Ar arp.dat
++is stored) must be owned by
++.Ar username
++if the
++.Fl u
++flag is used.
+ .Pp
+ The
+ .Fl s
+ flag suppresses reports sent by email.
+ .Pp
+ The
++.Fl u
++flag causes
++.Nm
++to drop root privileges and change user ID to
++.Ar username
++and group ID to that of the primary group of
++.Ar username .
++This is recommended for security reasons.
++.Pp
++The
+ .Fl v
+ flag disables the reporting of VRRP/CARP ethernet prefixes as
+ described in RFC5798 (@MACZERO@0:@MACZERO@0:5e:@MACZERO@0:@MACZERO@1:xx).

@@ -1,6 +1,10 @@
 # Define nice level for arpwatch
 SERVICE_RUN_NICE_LEVEL="+5"
 
+# Options for the arpwatch@<interface> systemd units. The init script ignores
+# this and builds its own option list from the settings below.
+ARPWATCH_OPTS=""
+
 #GLOBAL_OPTIONS=""
 
 # Name of monitored interfaces

@@ -1,0 +1,24 @@
+Correctly handle -n 0/32 so that reporting of bogons from 0.0.0.0 can be
+turned off.
+
+Origin: Fedora, sent upstream 2021-04-24.
+
+--- arpwatch-3.9.orig/arpwatch.c	2023-12-03 19:10:05.000000000 +0100
++++ arpwatch-3.9/arpwatch.c	2026-08-16 19:34:20.361099292 +0200
+@@ -826,10 +826,12 @@
+ 
+ 	/* XXX hack */
+ 	n = ntohl(inet_addr(tstr));
+-	while ((n & 0xff000000) == 0) {
+-		n <<= 8;
+-		if (n == 0)
+-			return (0);
++	if (n || width != 32) {
++		while ((n & 0xff000000) == 0) {
++			n <<= 8;
++			if (n == 0)
++				return (0);
++		}
+ 	}
+ 	n = htonl(n);
+ 

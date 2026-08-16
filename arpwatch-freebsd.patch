@@ -1,0 +1,22 @@
+HAVE_FREEBSD_TRUE/HAVE_FREEBSD_FALSE are substituted but never assigned, so
+the FreeBSD rc.d script gets installed on every platform.
+
+--- arpwatch-3.9.orig/configure.in	2024-01-21 23:07:05.000000000 +0100
++++ arpwatch-3.9/configure.in	2026-08-16 19:38:45.589822987 +0200
+@@ -206,6 +206,16 @@
+ 	ln -s lbl/gnuc.h gnuc.h
+ fi
+ 
++case "${target_os}" in
++freebsd*)
++	HAVE_FREEBSD_TRUE=
++	HAVE_FREEBSD_FALSE='#'
++	;;
++*)
++	HAVE_FREEBSD_TRUE='#'
++	HAVE_FREEBSD_FALSE=
++	;;
++esac
+ AC_SUBST([HAVE_FREEBSD_FALSE])
+ AC_SUBST([HAVE_FREEBSD_TRUE])
+ AC_SUBST([LBL_LIBS])
